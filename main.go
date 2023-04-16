@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"gee"
@@ -11,15 +10,15 @@ func main() {
 	//创建我们的引擎对象
 	engine := gee.NewEngine()
 	//注册路由
-	engine.GET("/", func(w http.ResponseWriter, req *http.Request) {
-		fmt.Fprintf(w, "Hello This is Gee\nlocation: %s\n", req.URL.Path)
+	engine.GET("/",func(context *gee.Context) {
+		context.HTML(http.StatusOK,"<h1>HELLO GEE</h1>")
 	})
 
-	engine.GET("/header", func(w http.ResponseWriter, req *http.Request) {
-		for k, v := range req.Header {
-			fmt.Fprintf(w, "Header[%q] = %q\n", k, v)
-		}
-	
+	engine.POST("/header", func(context *gee.Context) {
+		context.JSON(http.StatusOK,gee.JSON{
+			"username":context.PostForm("username"),
+			"password":context.PostForm("password"),
+		})
 	})
 
 	//启动engine
