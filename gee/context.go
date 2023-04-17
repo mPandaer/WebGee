@@ -19,9 +19,18 @@ type Context struct {
 	//提供底层的实例
 	Writer http.ResponseWriter
 	Req    *http.Request
-	//封装好的请求方法，以及请求路径
+	//请求信息
 	Method string
 	Path   string
+	Params map[string]string
+
+	//响应信息
+	StatusCode int
+}
+
+func (c *Context) Param(key string) string {
+	val,_ := c.Params[key]
+	return val
 }
 
 // 向外暴露一个创建Context的函数
@@ -53,6 +62,7 @@ func (context *Context) SetHeader(key string, value string) {
 
 // 提供设置响应状态码的方法
 func (context *Context) SetStatus(code int) {
+	context.StatusCode = code
 	context.Writer.WriteHeader(code)
 }
 

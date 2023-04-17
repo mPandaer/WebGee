@@ -21,6 +21,13 @@ func main() {
 		})
 	})
 
+	engine.GET("/:abc/ok", func(context *gee.Context) {
+		context.JSON(http.StatusOK,gee.JSON{
+			"abc":context.Params["abc"],
+		
+		})
+	})
+
 	//启动engine
 	engine.Run(":9999")
 
