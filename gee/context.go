@@ -13,6 +13,7 @@ import (
 //基于此我们需要封装一些信息，所以我们的Context诞生了
 
 var contentType = "Content-Type"
+
 type JSON = map[string]interface{}
 
 type Context struct {
@@ -29,7 +30,7 @@ type Context struct {
 }
 
 func (c *Context) Param(key string) string {
-	val,_ := c.Params[key]
+	val := c.Params[key]
 	return val
 }
 
@@ -68,31 +69,31 @@ func (context *Context) SetStatus(code int) {
 
 //提供好用的响应API 处理方法
 
-//响应HTML
+// 响应HTML
 func (context *Context) HTML(code int, html string) {
-	context.SetHeader(contentType,"text/html")
+	context.SetHeader(contentType, "text/html")
 	context.SetStatus(code)
 	context.Writer.Write([]byte(html))
 }
 
-//响应JSON
-func (context *Context) JSON(code int,data JSON) {
+// 响应JSON
+func (context *Context) JSON(code int, data JSON) {
 	context.SetStatus(code)
-	context.SetHeader(contentType,"application/json")
+	context.SetHeader(contentType, "application/json")
 	encoder := json.NewEncoder(context.Writer)
 	if err := encoder.Encode(data); err != nil {
-		http.Error(context.Writer,err.Error(),500)
+		http.Error(context.Writer, err.Error(), 500)
 	}
 }
 
-//响应普通文本
-func (context *Context) String(code int,format string, values ...interface{}) {
+// 响应普通文本
+func (context *Context) String(code int, format string, values ...interface{}) {
 	context.SetStatus(code)
-	context.SetHeader(contentType,"text/plain")
-	context.Writer.Write([]byte(fmt.Sprintf(format,values...)))
+	context.SetHeader(contentType, "text/plain")
+	context.Writer.Write([]byte(fmt.Sprintf(format, values...)))
 }
 
-//响应二进制数据
+// 响应二进制数据
 func (context *Context) Data(code int, data []byte) {
 	context.SetStatus(code)
 	context.Writer.Write(data)

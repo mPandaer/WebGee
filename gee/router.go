@@ -91,6 +91,7 @@ func (router *router) getRoute(method string, pattern string) (*node, map[string
 func (router *router) handle(context *Context) {
 	//获取唯一的请求标识
 	n, params := router.getRoute(context.Method, context.Path)
+
 	if n != nil {
 		context.Params = params
 		key := context.Method + "-" + n.pattern
